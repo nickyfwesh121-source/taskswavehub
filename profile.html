@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskWave - My Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #2563eb;
+            --success-green: #10b981;
+            --warning-yellow: #f59e0b;
+            --error-red: #ef4444;
+            --purple: #8b5cf6;
+            --gray: #64748b;
+            --card-border: #e2e8f0;
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --card-bg: #ffffff;
+            --header-bg: #ffffff;
+            --sidebar-bg: #ffffff;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --text-color: #f1f5f9;
+            --card-bg: #1e293b;
+            --header-bg: #1e293b;
+            --sidebar-bg: #1e293b;
+            --card-border: #334155;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        /*.loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }*/
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            background-color: var(--header-bg);
+            box-shadow: var(--shadow-md);
+            height: 70px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-blue), #1d4ed8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-blue), #1d4ed8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .dark-mode-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: linear-gradient(to right, #e2e8f0, #cbd5e1);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dark-mode-toggle.active {
+            background: linear-gradient(to right, #475569, #334155);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .dark-mode-toggle.active .toggle-slider {
+            transform: translateX(30px);
+        }
+
+        .dark-mode-toggle i {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: #64748b;
+            z-index: 1;
+        }
+
+        .dark-mode-toggle .fa-moon { left: 8px; }
+        .dark-mode-toggle .fa-sun { right: 8px; }
+
+        .user-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            border-radius: 12px;
+            background: rgba(37, 99, 235, 0.05);
+            border: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-blue), #1d4ed8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .user-balance {
+            font-size: 13px;
+            color: var(--success-green);
+            font-weight: 600;
+        }
+
+        /* MAIN */
+        .main-content {
+            padding: 100px 24px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.03));
+            border-radius: 20px;
+            border: 1px solid rgba(37, 99, 235, 0.15);
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .page-header h1 span {
+            background: linear-gradient(135deg, var(--primary-blue), #1d4ed8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            font-size: 16px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .profile-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--card-border);
+        }
+
+        .card-header {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-title i {
+            color: var(--primary-blue);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label i {
+            color: var(--primary-blue);
+            font-size: 16px;
+        }
+
+        .form-label .readonly-badge {
+            margin-left: auto;
+            font-size: 11px;
+            padding: 4px 10px;
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--gray);
+            border-radius: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            font-size: 16px;
+            color: var(--text-color);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-control:disabled,
+        .form-control:read-only {
+            background: rgba(100, 116, 139, 0.05);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .helper-text {
+            font-size: 13px;
+            color: var(--gray);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .helper-text i {
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-blue);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(37, 99, 235, 0.2);
+        }
+
+        .avatar-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(37, 99, 235, 0.02));
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary-blue), #1d4ed8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 48px;
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        .avatar-name {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .avatar-email {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .password-strength {
+            margin-top: 10px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .password-strength.weak {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-red);
+            display: block;
+        }
+
+        .password-strength.medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-yellow);
+            display: block;
+        }
+
+        .password-strength.strong {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-green);
+            display: block;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--header-bg);
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
+            padding: 16px 24px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            transition: var(--transition);
+            padding: 12px 20px;
+            border-radius: 16px;
+            min-width: 80px;
+        }
+
+        .nav-item.active {
+            color: var(--primary-blue);
+            background: rgba(37, 99, 235, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.2);
+        }
+
+        .nav-item i {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .nav-item span {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 100px 16px 40px;
+            }
+
+            .profile-card {
+                padding: 24px;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .avatar-large {
+                width: 100px;
+                height: 100px;
+                font-size: 40px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loading-text">Loading...</div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">
+                <i class="fas fa-wave-square"></i>
+            </div>
+            <div class="logo-text">TaskWave</div>
+        </div>
+        
+        <div class="header-controls">
+            <div class="dark-mode-toggle" id="dark-mode-toggle">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+                <div class="toggle-slider"></div>
+            </div>
+            
+            <div class="user-profile-header">
+                <div class="user-avatar" id="user-avatar">--</div>
+                <div class="user-info">
+                    <div class="user-name" id="username">Loading...</div>
+                    <div class="user-balance">₦<span id="user-balance">0</span></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>My <span>Profile</span> 👤</h1>
+            <p>Manage your account information and security settings</p>
+        </div>
+
+        <!-- Profile Grid -->
+        <div class="profile-grid">
+            <!-- Profile Information Card -->
+            <div class="profile-card">
+                <div class="avatar-section">
+                    <div class="avatar-large" id="avatar-large">--</div>
+                    <div class="avatar-name" id="avatar-name">Loading...</div>
+                    <div class="avatar-email" id="avatar-email">loading@example.com</div>
+                </div>
+
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Profile Information</span>
+                    </h2>
+                </div>
+
+                <form id="profile-form">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-signature"></i>
+                            Full Name
+                        </label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
+                        <div class="helper-text">
+                            <i class="fas fa-info-circle"></i>
+                            <span>This is your display name</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-at"></i>
+                            Username
+                            <span class="readonly-badge">Read Only</span>
+                        </label>
+                        <input type="text" class="form-control" id="username-field" readonly>
+                        <div class="helper-text">
+                            <i class="fas fa-lock"></i>
+                            <span>Username cannot be changed</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            Email Address
+                            <span class="readonly-badge">Read Only</span>
+                        </label>
+                        <input type="email" class="form-control" id="email-field" readonly>
+                        <div class="helper-text">
+                            <i class="fas fa-lock"></i>
+                            <span>Email is linked to your account</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user-plus"></i>
+                            Referred By
+                            <span class="readonly-badge">Read Only</span>
+                        </label>
+                        <input type="text" class="form-control" id="referredBy-field" readonly>
+                        <div class="helper-text">
+                            <i class="fas fa-info-circle"></i>
+                            <span>The user who referred you to TaskWave</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-calendar"></i>
+                            Member Since
+                            <span class="readonly-badge">Read Only</span>
+                        </label>
+                        <input type="text" class="form-control" id="createdAt-field" readonly>
+                        <div class="helper-text">
+                            <i class="fas fa-clock"></i>
+                            <span>Your account creation date</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="update-profile-btn">
+                        <i class="fas fa-save"></i>
+                        <span>Update Profile</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Change Password Card -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-key"></i>
+                        <span>Change Password</span>
+                    </h2>
+                </div>
+
+                <form id="password-form">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Current Password
+                        </label>
+                        <input type="password" class="form-control" id="current-password" placeholder="Enter current password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-lock-open"></i>
+                            New Password
+                        </label>
+                        <input type="password" class="form-control" id="new-password" placeholder="Enter new password" required>
+                        <div class="password-strength" id="password-strength"></div>
+                        <div class="helper-text">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Minimum 8 characters with letters and numbers</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-check-circle"></i>
+                            Confirm New Password
+                        </label>
+                        <input type="password" class="form-control" id="confirm-password" placeholder="Re-enter new password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="change-password-btn">
+                        <i class="fas fa-key"></i>
+                        <span>Change Password</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        
+        <a href="tasks.html" class="nav-item">
+            <i class="fas fa-tasks"></i>
+            <span>Tasks</span>
+        </a>
+        
+        <a href="withdraw.html" class="nav-item">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Withdraw</span>
+        </a>
+        
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyC7Pt1hH2AZTPmNW3XGLpgJWa4US0P3RoE",
+            authDomain: "taskswave.firebaseapp.com",
+            projectId: "taskswave",
+            storageBucket: "taskswave.firebasestorage.app",
+            messagingSenderId: "91401216844",
+            appId: "1:91401216844:web:257dcd0daa86fa6306e5e9",
+            measurementId: "G-8R3HV9YQTL"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // STATE
+        let currentUser = null;
+        let userData = null;
+
+        // DOM
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const profileForm = document.getElementById('profile-form');
+        const passwordForm = document.getElementById('password-form');
+        const updateProfileBtn = document.getElementById('update-profile-btn');
+        const changePasswordBtn = document.getElementById('change-password-btn');
+        const newPasswordInput = document.getElementById('new-password');
+        const passwordStrength = document.getElementById('password-strength');
+
+        // UTILITY
+        function showLoading(text = 'Loading...') {
+            loadingText.textContent = text;
+            loadingOverlay.classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.add('hidden');
+        }
+
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function formatDate(timestamp) {
+            if (!timestamp) return 'Not available';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+
+        function getInitials(name) {
+            if (!name) return '--';
+            const parts = name.split(' ');
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[1][0]).toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+
+        // DARK MODE
+        function initDarkMode() {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.classList.add('active');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            darkModeToggle.classList.toggle('active', isDarkMode);
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+
+        // PASSWORD STRENGTH
+        newPasswordInput.addEventListener('input', () => {
+            const password = newPasswordInput.value;
+            let strength = '';
+            
+            if (password.length === 0) {
+                passwordStrength.className = 'password-strength';
+                return;
+            }
+            
+            if (password.length < 8) {
+                strength = 'weak';
+                passwordStrength.textContent = '⚠️ Weak password - At least 8 characters required';
+            } else if (password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/)) {
+                strength = 'strong';
+                passwordStrength.textContent = '✓ Strong password';
+            } else if (password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)) {
+                strength = 'medium';
+                passwordStrength.textContent = '⚡ Medium password - Add special characters for stronger security';
+            } else {
+                strength = 'weak';
+                passwordStrength.textContent = '⚠️ Weak password - Use mix of upper/lowercase and numbers';
+            }
+            
+            passwordStrength.className = `password-strength ${strength}`;
+        });
+
+        // FETCH USER DATA
+        async function fetchUserData(userId) {
+            try {
+                const userDoc = await db.collection('users').doc(userId).get();
+                
+                if (!userDoc.exists) {
+                    throw new Error('User data not found');
+                }
+
+                userData = userDoc.data();
+                
+                // Update UI
+                const displayName = userData.username || userData.displayName || 'User';
+                const fullName = userData.fullName || displayName;
+                
+                document.getElementById('username').textContent = displayName;
+                document.getElementById('user-avatar').textContent = getInitials(fullName);
+                document.getElementById('user-balance').textContent = formatNumber(userData.balance || 0);
+                
+                // Avatar section
+                document.getElementById('avatar-large').textContent = getInitials(fullName);
+                document.getElementById('avatar-name').textContent = fullName;
+                document.getElementById('avatar-email').textContent = currentUser.email || 'No email';
+                
+                // Form fields
+                document.getElementById('fullName').value = fullName;
+                document.getElementById('username-field').value = displayName;
+                document.getElementById('email-field').value = currentUser.email || 'Not available';
+                document.getElementById('referredBy-field').value = userData.referredBy || 'Direct signup';
+                document.getElementById('createdAt-field').value = formatDate(userData.createdAt);
+
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                alert('Error loading profile data');
+            }
+        }
+
+        // UPDATE PROFILE
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value.trim();
+
+            if (!fullName) {
+                alert('Please enter your full name');
+                return;
+            }
+
+            try {
+                showLoading('Updating profile...');
+                updateProfileBtn.disabled = true;
+
+                await db.collection('users').doc(currentUser.uid).update({
+                    fullName: fullName
+                });
+
+                // Update display name in Firebase Auth (optional)
+                await currentUser.updateProfile({
+                    displayName: fullName
+                });
+
+                hideLoading();
+                alert('Profile updated successfully!');
+                
+                // Refresh data
+                await fetchUserData(currentUser.uid);
+
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                hideLoading();
+                alert('Error updating profile: ' + error.message);
+            } finally {
+                updateProfileBtn.disabled = false;
+            }
+        });
+
+        // CHANGE PASSWORD
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Validations
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                alert('Please fill in all password fields');
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                alert('New password must be at least 8 characters long');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match');
+                return;
+            }
+
+            if (newPassword === currentPassword) {
+                alert('New password must be different from current password');
+                return;
+            }
+
+            try {
+                showLoading('Changing password...');
+                changePasswordBtn.disabled = true;
+
+                // Re-authenticate user
+                const credential = firebase.auth.EmailAuthProvider.credential(
+                    currentUser.email,
+                    currentPassword
+                );
+
+                await currentUser.reauthenticateWithCredential(credential);
+
+                // Update password
+                await currentUser.updatePassword(newPassword);
+
+                hideLoading();
+                alert('Password changed successfully!');
+                
+                // Clear form
+                passwordForm.reset();
+                passwordStrength.className = 'password-strength';
+
+            } catch (error) {
+                console.error('Error changing password:', error);
+                hideLoading();
+                
+                if (error.code === 'auth/wrong-password') {
+                    alert('Current password is incorrect');
+                } else if (error.code === 'auth/weak-password') {
+                    alert('New password is too weak');
+                } else {
+                    alert('Error changing password: ' + error.message);
+                }
+            } finally {
+                changePasswordBtn.disabled = false;
+            }
+        });
+
+        // AUTH
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                showLoading('Loading profile...');
+                
+                await fetchUserData(user.uid);
+                
+                hideLoading();
+            } else {
+                alert('Please login to view profile');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // INIT
+        document.addEventListener('DOMContentLoaded', () => {
+            initDarkMode();
+        });
+    </script>
+</body>
+</html>
