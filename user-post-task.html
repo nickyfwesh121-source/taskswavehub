@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskWave - Post Task</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #2563eb;
+            --light-blue: #3b82f6;
+            --dark-blue: #1d4ed8;
+            --success-green: #10b981;
+            --warning-yellow: #f59e0b;
+            --error-red: #ef4444;
+            --purple: #8b5cf6;
+            --gray: #64748b;
+            --card-border: #e2e8f0;
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+            
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --card-bg: #ffffff;
+            --header-bg: #ffffff;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --text-color: #f1f5f9;
+            --card-bg: #1e293b;
+            --header-bg: #1e293b;
+            --card-border: #334155;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            background-color: var(--header-bg);
+            box-shadow: var(--shadow-md);
+            height: 70px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-blue), var(--dark-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .dark-mode-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: linear-gradient(to right, #e2e8f0, #cbd5e1);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dark-mode-toggle.active {
+            background: linear-gradient(to right, #475569, #334155);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .dark-mode-toggle.active .toggle-slider {
+            transform: translateX(30px);
+        }
+
+        .dark-mode-toggle i {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: #64748b;
+            z-index: 1;
+        }
+
+        .dark-mode-toggle .fa-moon { left: 8px; }
+        .dark-mode-toggle .fa-sun { right: 8px; }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            border-radius: 12px;
+            background: rgba(37, 99, 235, 0.05);
+            border: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .user-balance {
+            font-size: 13px;
+            color: var(--success-green);
+            font-weight: 600;
+        }
+
+        .main-content {
+            padding: 100px 24px 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.05));
+            border-radius: 24px;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue), var(--success-green));
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .page-header h1 span {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            margin-bottom: 30px;
+        }
+
+        .card-title {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-title i {
+            font-size: 28px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-subtitle {
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .balance-display {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(16, 185, 129, 0.1));
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(37, 99, 235, 0.2);
+        }
+
+        .balance-label {
+            font-size: 14px;
+            color: var(--gray);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .balance-amount {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--success-green);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: var(--text-color);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-label i {
+            color: var(--primary-blue);
+            font-size: 18px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 14px;
+            font-size: 16px;
+            color: var(--text-color);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 20px;
+            background: rgba(37, 99, 235, 0.05);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .checkbox-group:hover {
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .cost-summary {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(139, 92, 246, 0.08));
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .cost-item:last-child {
+            border-bottom: none;
+            padding-top: 20px;
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .cost-label {
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .cost-value {
+            font-weight: 800;
+            color: var(--text-color);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .table-card {
+            grid-column: 1 / -1;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .tasks-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tasks-table th {
+            text-align: left;
+            padding: 18px 16px;
+            border-bottom: 2px solid var(--card-border);
+            color: var(--gray);
+            font-weight: 800;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tasks-table td {
+            padding: 22px 16px;
+            border-bottom: 1px solid var(--card-border);
+            vertical-align: middle;
+        }
+
+        .tasks-table tbody tr:hover {
+            background: rgba(37, 99, 235, 0.03);
+        }
+
+        .platform-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-blue);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning-yellow);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success-green);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9) translateY(20px);
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            padding: 35px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .modal-title i {
+            font-size: 32px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-body {
+            padding: 35px;
+        }
+
+        .modal-text {
+            color: var(--text-color);
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            padding: 35px;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 18px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-cancel {
+            background: rgba(100, 116, 139, 0.15);
+            color: var(--gray);
+            border: 2px solid var(--card-border);
+        }
+
+        .btn-cancel:hover {
+            background: rgba(100, 116, 139, 0.25);
+        }
+
+        .btn-confirm {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-confirm:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.6);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--header-bg);
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
+            padding: 16px 24px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            transition: var(--transition);
+            padding: 12px 20px;
+            border-radius: 16px;
+            min-width: 80px;
+        }
+
+        .nav-item.active {
+            color: var(--primary-blue);
+            background: rgba(37, 99, 235, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.2);
+        }
+
+        .nav-item i {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .nav-item span {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 100px 16px 40px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .tasks-table {
+                min-width: 1000px;
+            }
+
+            .user-info {
+                display: none;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">
+                <i class="fas fa-wave-square"></i>
+            </div>
+            <div class="logo-text">TaskWave</div>
+        </div>
+        
+        <div class="header-controls">
+            <div class="dark-mode-toggle" id="dark-mode-toggle">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+                <div class="toggle-slider"></div>
+            </div>
+            
+            <div class="user-profile">
+                <div class="user-avatar" id="user-avatar">--</div>
+                <div class="user-info">
+                    <div class="user-name" id="username">Loading...</div>
+                    <div class="user-balance">₦<span id="header-balance">0</span></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-plus-circle"></i>
+                Post <span>Task</span>
+            </h1>
+            <p>Create tasks for others to complete and earn</p>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        Create New Task
+                    </h2>
+                    <p class="card-subtitle">Fill in the task details below</p>
+                </div>
+
+                <div class="balance-display">
+                    <div class="balance-label">Your Current Balance</div>
+                    <div class="balance-amount">₦<span id="balance-display">0</span></div>
+                </div>
+
+                <form id="task-form">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-heading"></i>
+                            Task Title
+                        </label>
+                        <input type="text" class="form-control" id="title" placeholder="e.g., Follow my TikTok account" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-align-left"></i>
+                            Description
+                        </label>
+                        <textarea class="form-control" id="description" rows="4" placeholder="Describe what users need to do..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-share-alt"></i>
+                            Platform
+                        </label>
+                        <select class="form-control" id="platform" required>
+                            <option value="">Select Platform</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="youtube">YouTube</option>
+                            <option value="telegram">Telegram</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="twitter">Twitter</option>
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="website">Website</option>
+                            
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-link"></i>
+                            Task Link
+                        </label>
+                        <input type="url" class="form-control" id="link" placeholder="https://..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-money-bill-wave"></i>
+                            Price Per User (Minimum ₦5)
+                        </label>
+                        <input type="number" class="form-control" id="price" placeholder="5" min="5" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-users"></i>
+                            Number of Participants
+                        </label>
+                        <input type="number" class="form-control" id="participants" placeholder="10" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="screenshot-required">
+                            <label for="screenshot-required">
+                                <i class="fas fa-camera"></i> Screenshot Required
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Post Task</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-calculator"></i>
+                        Cost Summary
+                    </h2>
+                    <p class="card-subtitle">Automatic calculation</p>
+                </div>
+
+                <div class="cost-summary">
+                    <div class="cost-item">
+                        <span class="cost-label">Price Per User</span>
+                        <span class="cost-value">₦<span id="summary-price">0</span></span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label">Participants</span>
+                        <span class="cost-value" id="summary-participants">0</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label">Total Cost</span>
+                        <span class="cost-value" style="color: var(--primary-blue);">₦<span id="summary-total">0</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card table-card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-history"></i>
+                        My Tasks History
+                    </h2>
+                    <p class="card-subtitle">Track your posted tasks</p>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="tasks-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Platform</th>
+                                <th>Price</th>
+                                <th>Participants</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tasks-tbody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 50px; color: var(--gray);">
+                                    <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                                    <span style="font-weight: 600;">No tasks posted yet</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-check-circle"></i>
+                    Confirm Task
+                </h3>
+            </div>
+
+            <div class="modal-body">
+                <p class="modal-text">
+                    You are about to post a task that will cost <strong style="color: var(--primary-blue);">₦<span id="modal-total">0</span></strong>.
+                </p>
+                <p class="modal-text">
+                    This amount will be deducted from your balance immediately. Are you sure you want to proceed?
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeConfirmModal()">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button class="btn btn-confirm" id="final-submit-btn">
+                    <i class="fas fa-check"></i>
+                    Yes, Post Task
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="success-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-check-circle"></i>
+                    Task Posted
+                </h3>
+            </div>
+
+            <div class="modal-body">
+                <div style="text-align: center; padding: 30px;">
+                    <i class="fas fa-check-circle" style="font-size: 80px; color: var(--success-green); margin-bottom: 25px;"></i>
+                    <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 15px;">Success!</h2>
+                    <p style="color: var(--gray); font-size: 16px; line-height: 1.8;">
+                        Your task has been posted successfully! It's now under review and will be live soon.
+                    </p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-confirm" onclick="closeSuccessModal()" style="width: 100%;">
+                    <i class="fas fa-check"></i>
+                    Got It
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="error-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-exclamation-circle" style="background: linear-gradient(135deg, var(--error-red), #dc2626); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                    Insufficient Balance
+                </h3>
+            </div>
+
+            <div class="modal-body">
+                <div style="text-align: center; padding: 30px;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 80px; color: var(--error-red); margin-bottom: 25px;"></i>
+                    <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 15px;">Oops!</h2>
+                    <p style="color: var(--gray); font-size: 16px; line-height: 1.8;" id="error-message">
+                        You don't have enough balance to post this task. Please deposit funds first.
+                    </p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-confirm" onclick="closeErrorModal()" style="width: 100%;">
+                    <i class="fas fa-check"></i>
+                    Okay
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        
+        <a href="tasks.html" class="nav-item">
+            <i class="fas fa-tasks"></i>
+            <span>Tasks</span>
+        </a>
+        
+        <a href="#" class="nav-item active">
+            <i class="fas fa-plus-circle"></i>
+            <span>Post</span>
+        </a>
+        
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC7Pt1hH2AZTPmNW3XGLpgJWa4US0P3RoE",
+            authDomain: "taskswave.firebaseapp.com",
+            projectId: "taskswave",
+            storageBucket: "taskswave.firebasestorage.app",
+            messagingSenderId: "91401216844",
+            appId: "1:91401216844:web:257dcd0daa86fa6306e5e9",
+            measurementId: "G-8R3HV9YQTL"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let currentUser = null;
+        let userBalance = 0;
+        let taskData = null;
+
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const taskForm = document.getElementById('task-form');
+        const priceInput = document.getElementById('price');
+        const participantsInput = document.getElementById('participants');
+        const confirmModal = document.getElementById('confirm-modal');
+        const successModal = document.getElementById('success-modal');
+        const errorModal = document.getElementById('error-modal');
+        const tasksTbody = document.getElementById('tasks-tbody');
+
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function formatDate(timestamp) {
+            if (!timestamp) return '--';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        function getInitials(name) {
+            if (!name) return '--';
+            const parts = name.split(' ');
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[1][0]).toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+
+        function initDarkMode() {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.classList.add('active');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            darkModeToggle.classList.toggle('active', isDarkMode);
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+
+        function updateCostSummary() {
+            const price = parseInt(priceInput.value) || 0;
+            const participants = parseInt(participantsInput.value) || 0;
+            const total = price * participants;
+
+            document.getElementById('summary-price').textContent = formatNumber(price);
+            document.getElementById('summary-participants').textContent = participants;
+            document.getElementById('summary-total').textContent = formatNumber(total);
+        }
+
+        priceInput.addEventListener('input', updateCostSummary);
+        participantsInput.addEventListener('input', updateCostSummary);
+
+        async function fetchUserData(userId) {
+            const userDoc = await db.collection('users').doc(userId).get();
+            const userData = userDoc.data();
+
+            userBalance = userData.balance || 0;
+
+            document.getElementById('username').textContent = userData.username || 'User';
+            document.getElementById('user-avatar').textContent = getInitials(userData.username);
+            document.getElementById('header-balance').textContent = formatNumber(userBalance);
+            document.getElementById('balance-display').textContent = formatNumber(userBalance);
+        }
+
+        async function fetchUserTasks() {
+            if (!currentUser) return;
+
+            const tasksSnapshot = await db.collection('tasks')
+                .where('userId', '==', currentUser.uid)
+               // .orderBy('createdAt', 'desc')
+                .limit(10)
+                .get();
+
+            tasksTbody.innerHTML = '';
+
+            if (tasksSnapshot.empty) {
+                tasksTbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 50px; color: var(--gray);">
+                            <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                            <span style="font-weight: 600;">No tasks posted yet</span>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tasksSnapshot.forEach(doc => {
+                const task = doc.data();
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 700;">${task.title}</td>
+                    <td>
+                        <span class="platform-badge">
+                            <i class="fab fa-${task.platform}"></i>
+                            ${task.platform.charAt(0).toUpperCase() + task.platform.slice(1)}
+                        </span>
+                    </td>
+                    <td style="font-weight: 800; color: var(--success-green);">₦${formatNumber(task.price)}</td>
+                    <td style="font-weight: 700;">${task.participations}/${task.currentSubmissions}</td>
+                    <td>
+                        <span class="status-badge status-${task.status}">
+                            <i class="fas fa-${task.status === 'pending' ? 'clock' : 'check'}"></i>
+                            ${task.status.charAt(0).toUpperCase() + task.status.slice(1)}
+                        </span>
+                    </td>
+                    <td style="font-weight: 600;">${formatDate(task.createdAt)}</td>
+                `;
+                tasksTbody.appendChild(row);
+            });
+        }
+
+        taskForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const price = parseInt(document.getElementById('price').value);
+            const participants = parseInt(document.getElementById('participants').value);
+
+            if (price < 10) {
+                showErrorModal('Minimum price per user is ₦10');
+                return;
+            }
+
+            const totalCost = price * participants;
+
+            if (userBalance < totalCost) {
+                showErrorModal(`Insufficient balance! You need ₦${formatNumber(totalCost)} but only have ₦${formatNumber(userBalance)}.`);
+                return;
+            }
+
+            taskData = {
+                title: document.getElementById('title').value.trim(),
+                description: document.getElementById('description').value.trim(),
+                platform: document.getElementById('platform').value,
+                link: document.getElementById('link').value.trim(),
+                price: price,
+                participants: participants,
+                screenshotRequired: document.getElementById('screenshot-required').checked,
+                totalCost: totalCost
+            };
+
+            document.getElementById('modal-total').textContent = formatNumber(totalCost);
+            confirmModal.classList.add('active');
+        });
+
+        window.closeConfirmModal = function() {
+            confirmModal.classList.remove('active');
+        };
+
+        window.closeSuccessModal = function() {
+            successModal.classList.remove('active');
+        };
+
+        window.closeErrorModal = function() {
+            errorModal.classList.remove('active');
+        };
+
+        function showErrorModal(message) {
+            document.getElementById('error-message').textContent = message;
+            errorModal.classList.add('active');
+        }
+
+        document.getElementById('final-submit-btn').addEventListener('click', async function() {
+            if (!currentUser || !taskData) return;
+
+            try {
+                this.disabled = true;
+                closeConfirmModal();
+
+                await db.collection('users').doc(currentUser.uid).update({
+                    balance: firebase.firestore.FieldValue.increment(-taskData.totalCost)
+                });
+
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                const userData = userDoc.data();
+
+                await db.collection('tasks').add({
+                    userId: currentUser.uid,
+                    username: userData.username || 'Unknown',
+                    title: taskData.title,
+                    description: taskData.description,
+                    platform: taskData.platform,
+                    link: taskData.link,
+                    price: taskData.price,
+                    participations: taskData.participants,
+                    currentSubmissions: 0,
+                    screenshotRequired: taskData.screenshotRequired,
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                taskForm.reset();
+                taskData = null;
+                updateCostSummary();
+
+                await fetchUserData(currentUser.uid);
+                await fetchUserTasks();
+
+                successModal.classList.add('active');
+
+            } catch (error) {
+                console.error('Error:', error);
+                showErrorModal('Error posting task: ' + error.message);
+            } finally {
+                this.disabled = false;
+            }
+        });
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+
+                await fetchUserData(user.uid);
+                await fetchUserTasks();
+
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initDarkMode();
+        });
+    </script>
+</body>
+</html>
